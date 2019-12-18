@@ -1,0 +1,113 @@
+---
+driver:
+   name: docker
+
+#name: ec2
+#  aws_ssh_key_id: D085
+#  region: us-east-1
+#  availability_zone: d
+#  subnet_id: subnet-d01730b7
+#  instance_type: t2.micro
+#  image_id: ami-0bba96c31d87e65d9
+#  security_group_ids: ["sg-01932cfffa5ae5882"]
+#  retryable_tries: 120
+
+#  network:
+#    - ["forwarded_port", {guest: 80, host: 8080}]
+
+provisioner:
+  name: chef_zero
+
+  ## product_name and product_version specifies a specific Chef product and version to install.
+  ## see the Chef documentation for more details: https://docs.chef.io/config_yml_kitchen.html
+  #  product_name: chef
+  #  product_version: 15
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: ubuntu-18.04
+
+#transport:
+#  ssh_key: ssh/D085.pem
+#  username: root
+#  connection_timeout: 10
+#  connection_retries: 5  
+
+suites:
+  - name: default
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+
+  -  name: game_core
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-Core'
+
+- name: game_database
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-Database'
+
+- name: game_web_f
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-WebFrontend'
+
+- name: game_web_b
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-WebBackend'
+
+- name: game_micropayment
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-Micropayment'
+
+- name: coop_core
+    provisioner:
+      named_run_list: coop_core
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Coop-Core'
+
+- name: coop_gateway
+    provisioner:
+      named_run_list: coop_gateway
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Coop-Gateway'
+
+- name: coop_env
+    provisioner:
+      named_run_list: coop_env
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Coop-Env'

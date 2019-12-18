@@ -1,0 +1,63 @@
+---
+driver:
+  name: docker
+
+provisioner:
+  name: chef_zero
+
+  
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-latest
+
+
+suites:
+  - name: default
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+
+  - name: game_core
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-Core'
+
+  - name: game_database
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-Database'
+
+  - name: game_web_f
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-WebFrontend'
+
+  - name: game_web_b
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-WebBackend'
+
+  - name: game_micropayment
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
+    tags:
+      Name: 'Game-Micropayment'
+
